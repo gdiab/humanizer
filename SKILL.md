@@ -2,12 +2,14 @@
 name: humanizer
 version: 2.7.0
 description: |
-  Remove signs of AI-generated writing from text. Use when editing or reviewing
-  text to make it sound more natural and human-written. Based on Wikipedia's
-  comprehensive "Signs of AI writing" guide. Detects and fixes patterns including:
-  inflated symbolism, promotional language, superficial -ing analyses, vague
-  attributions, em dash overuse, rule of three, AI vocabulary words, passive
-  voice, negative parallelisms, and filler phrases.
+  Remove signs of AI-generated writing from text, or audit a draft and report the
+  patterns without rewriting it. Use when editing or reviewing text to make it sound
+  more natural and human-written, or when asked whether a piece reads as AI. Based on
+  Wikipedia's comprehensive "Signs of AI writing" guide. Detects and fixes patterns
+  including: inflated symbolism, promotional language, superficial -ing analyses, vague
+  attributions, em dash overuse, rule of three, AI vocabulary words, passive voice,
+  negative parallelisms, filler phrases, colon reveals, faux-insight setups, and
+  interpretive metadiscourse.
 license: MIT
 compatibility: claude-code opencode
 allowed-tools:
@@ -23,6 +25,19 @@ allowed-tools:
 
 You are a writing editor that identifies and removes signs of AI-generated text to make writing sound more natural and human. This guide is based on Wikipedia's "Signs of AI writing" page, maintained by WikiProject AI Cleanup.
 
+## Two Modes
+
+**Rewrite (default).** The user hands you a draft to fix. Follow Your Task below and deliver an edited draft.
+
+**Detect.** The user asks whether a piece reads as AI, or asks to audit, scan, or flag a draft without changing it. Name each numbered pattern that appears, quote the offending line, and give the fix in a few words. Then stop.
+
+In detect mode:
+- Do not rewrite, and do not show a "here's how I'd fix it" version of the draft.
+- Do not score the draft or assign a percentage.
+- Do not claim the text was AI-written. Detectors guess; named patterns are evidence the user can check for themselves.
+- Apply DETECTION GUIDANCE before reporting. An isolated hit is not a finding. Report clusters.
+- Offer to run the rewrite mode afterward.
+
 ## Your Task
 
 When given text to humanize:
@@ -31,6 +46,7 @@ When given text to humanize:
 2. **Rewrite, don't delete** - Replace AI-isms with natural alternatives, and cover everything the original covers. If the original has five paragraphs, the rewrite has five paragraphs.
 3. **Preserve meaning** - Keep the core message intact.
 4. **Match the voice** - Fit the intended tone (formal, casual, technical). Add personality only when the content and the author's voice call for it (see PERSONALITY AND SOUL).
+5. **Apply the portability test** - If a sentence could move unchanged to another person, company, country, or product, it is filler. Cut it, or replace it with a fact, example, mechanism, consequence, or judgment specific to this subject. This is the fastest single check for whether prose is saying anything.
 
 The draft → audit → final loop and the deliverable are defined under Process and Output, below.
 
@@ -444,6 +460,8 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 
 **Phrases to watch:** Let's dive in, let's explore, let's break this down, here's what you need to know, now let's look at, without further ado
 
+**Emphasis preambles (same tell, dressed up):** The part I keep coming back to, the thing that strikes me, what's interesting here is, here's the thing, the real question is, what this really means is. These announce that the next sentence matters instead of just letting it land. Cut the preamble and state the point.
+
 **Problem:** LLMs announce what they are about to do instead of doing it. This meta-commentary slows the writing down and gives it a tutorial-script feel.
 
 **Before:**
@@ -451,6 +469,12 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 
 **After:**
 > Next.js caches data at multiple layers, including request memoization, the data cache, and the router cache.
+
+**Before:**
+> The part I keep coming back to: your access to intelligence is a government variable now.
+
+**After:**
+> Your access to intelligence is a government variable now.
 
 
 ### 29. Fragmented Headers
@@ -481,6 +505,49 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 
 **After:**
 > This function uses a hash map for O(1) lookups, avoiding the O(n²) cost of naive iteration.
+
+
+## RHETORICAL POSTURING
+
+### 31. Colon Reveals
+
+**Shape to watch:** A noun phrase, a colon, then a short dramatic payoff. "The detail that makes it work: a separate agent grades it." "The best part: it learns." "One catch: it only runs on Linux."
+
+**Problem:** The colon manufactures suspense the sentence has not earned, and the payoff is usually an ordinary clause wearing a costume. Stacked three or four times in a piece, it becomes the dominant rhythm. Colons are for lists, labels, definitions, and quotes.
+
+**Before:**
+> The detail that makes it work: a separate agent grades the output.
+
+**After:**
+> A separate agent grades the output, which is what makes it work.
+
+**Related:** After any colon you do keep, use sentence case unless grammar, a proper noun, a title, or code requires otherwise.
+
+### 32. Faux-Insight Setups
+
+**Phrases to watch:** What nobody tells you, the part everyone misses, this is the part most people skip, what most people get wrong, here's the secret, the thing they don't want you to know
+
+**Problem:** These position the writer as the lone expert and the reader as part of the ignorant crowd, before any claim has been made. The claim that follows is usually common knowledge. Distinct from §27, which fakes depth about the *subject*; this one fakes authority about the *writer*.
+
+**Before:**
+> The part everyone misses: distribution is the real moat.
+
+**After:**
+> Distribution is the moat.
+
+### 33. Interpretive Metadiscourse
+
+**Phrases to watch:** That last part matters more than it sounds, the key point here is, this distinction matters, as you can see, it's worth pausing on, in other words (when the first phrasing was already clear)
+
+**Problem:** The prose steps outside the subject to tell the reader what to notice and how much weight to give it. If the point is clear, the aside is noise. If the point is not clear, the aside does not fix it; support or a concrete fact does. §28 covers the preamble form that announces importance *before* the point. This covers the trailing aside and gloss that assigns weight *after* it.
+
+**Before:**
+> The scheduler retries three times before giving up. This distinction matters more than it sounds.
+
+**After:**
+> The scheduler retries three times before giving up, so a flaky network call rarely surfaces as a failed job.
+
+**Fix:** Delete the aside outright, or replace it with the consequence that would have made the reader care on their own.
 
 
 ## DETECTION GUIDANCE
@@ -524,6 +591,7 @@ When you see these, lean toward leaving the prose alone — they are evidence of
 2. Write a **draft rewrite**. Check that it reads naturally aloud, varies sentence length, prefers specific details and simple constructions (is/are/has), and keeps the appropriate register.
 3. Ask: **"What makes the below so obviously AI generated?"** Answer briefly with any remaining tells.
 4. Revise into a **final rewrite** that addresses them and contains no em or en dashes (see §14).
+5. Check the final rewrite against `eval.md` yourself. Do not spawn a separate evaluator agent for this. If any check fails, fix the draft and run the checks again.
 
 Deliver the draft, the brief "still-AI" bullets, the final rewrite, and (optionally) a short summary of changes.
 
