@@ -4,6 +4,8 @@ Guidance for AI coding agents (Claude Code, Codex, Warp, etc.) working in this r
 
 ## What this repo is
 
+A fork of [blader/humanizer](https://github.com/blader/humanizer) tracking upstream v2.9.1, with fork-specific additions documented in the README's "About this fork" section. When pulling upstream, expect conflicts around the pattern numbering (upstream owns 1-33) and the validator's pattern count.
+
 A portable agent skill implemented entirely as Markdown. The runtime artifact is `SKILL.md`: the agent reads its YAML frontmatter and editor prompt. There is no build step, and the repo should avoid wording that limits support to one or two harnesses.
 
 ## Key files
@@ -11,14 +13,15 @@ A portable agent skill implemented entirely as Markdown. The runtime artifact is
 - `SKILL.md` — the skill itself. Portable YAML frontmatter (`name`, `description`, `license`, `metadata.version`) followed by the canonical, numbered pattern list with before/after examples. **This is the source of truth.**
 - `README.md` — for humans: installation, usage, a summary table of the patterns, and a version history.
 - `.claude-plugin/plugin.json` — optional Claude Code plugin manifest.
-- `.claude-plugin/marketplace.json` — optional single-repo marketplace entry so `/plugin marketplace add blader/humanizer` works.
-- `scripts/validate-package.py` — dependency-free package and synchronization checks used locally and in CI.
+- `.claude-plugin/marketplace.json` — optional single-repo marketplace entry so `/plugin marketplace add gdiab/humanizer` works.
+- `eval.md` — the self-check rubric the skill runs against its own output before returning. Fork addition. Keep its checks in sync with `SKILL.md`.
+- `scripts/validate-package.py` — dependency-free package and synchronization checks used locally and in CI. It derives the pattern count from `SKILL.md` rather than hardcoding it.
 
 ## The maintenance contract
 
 `SKILL.md` and `README.md` must stay in sync. When you change behavior or content:
 
-- **Patterns:** the skill currently defines **33 numbered patterns**. If you add, remove, or renumber any, update the README pattern table, its "N Patterns Detected" heading, and every cross-reference in the same change. Keep numbering stable unless you are deliberately renumbering.
+- **Patterns:** the skill currently defines **36 numbered patterns**, of which 1-33 are upstream and 34-36 are this fork's. If you add, remove, or renumber any, update the README pattern table, its "N Patterns Detected" heading, and every cross-reference in the same change. Keep numbering stable unless you are deliberately renumbering.
 - **Version:** `SKILL.md` frontmatter stores the version under `metadata.version`, `README.md` has a "Version History" section, and `.claude-plugin/plugin.json` has a `version` field. Bump them together so package metadata matches the skill. Keep the skill version under `metadata`; a top-level `version` key is not portable across Agent Skills hosts. (`marketplace.json` intentionally omits a version so `plugin.json` stays the package source of truth.)
 - **Compatibility:** keep install and usage language harness-neutral. The skill should work in any agent harness that can load Markdown skill instructions; Claude Code, OpenCode, Codex, and other harnesses are examples, not limits.
 - **Validation:** run `python3 scripts/validate-package.py`, `npx skills add . --list`, and `claude plugin validate .` before publishing.

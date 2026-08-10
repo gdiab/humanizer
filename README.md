@@ -1,8 +1,24 @@
-# Humanizer
-
-[![skills.sh installs](https://skills.sh/b/blader/humanizer)](https://skills.sh/blader/humanizer)
+# Humanizer (gdiab fork)
 
 A portable agent skill that removes signs of AI-generated writing from text, making it sound more natural and human. It is plain Markdown, so it can run in any harness that supports skill-style instructions.
+
+## About this fork
+
+This is a fork of [blader/humanizer](https://github.com/blader/humanizer), tracking upstream v2.9.1. Everything below that is not listed in this section is upstream's work, and all credit for the original 33 patterns and the Wikipedia-derived framework belongs there. MIT licensed both ways.
+
+Four additions, all of them adapted from [petergyang/no-ai-slop](https://github.com/petergyang/no-ai-slop) (MIT), which covers overlapping ground from a different angle:
+
+**Three patterns, numbered 34-36.** Colon reveals ("The best part: it learns."), faux-insight setups ("what nobody tells you"), and interpretive metadiscourse ("that last part matters more than it sounds"). Each is cross-referenced against the adjacent upstream patterns it could be confused with, since §27, §28, and §33 already cover neighboring instincts.
+
+**The portability test**, as step 5 of Your Task. If a sentence could move unchanged to another person, company, country, or product, it is filler. This turns out to be the fastest single check for whether a paragraph is saying anything, and it catches prose the other rules pass: writing that sounds like a specific human, commits to a position, and still asserts nothing checkable.
+
+**A detect mode**, as a fourth invocation mode. Name each pattern found, quote the line, give the fix in a few words, and stop. No rewriting, no score, no claim about whether AI wrote it. Detectors guess; named patterns are evidence a writer can check. Useful when you want the diagnosis on your own draft rather than an edit.
+
+**`eval.md`**, a 36-check rubric the skill runs against its own output before returning, wired in as step 5 of Process and Output. The instruction is explicitly to self-check rather than spawn an evaluator agent. The general mechanic, a skill grading its output against a separate rubric file, is worth stealing for skills that have nothing to do with writing.
+
+One divergence worth knowing: upstream's package validator hardcoded patterns 1-33, and this fork derives the count from SKILL.md instead so the check survives additions.
+
+Versioning is independent of upstream from 2.10.0 on.
 
 ## Installation
 
@@ -11,7 +27,7 @@ A portable agent skill that removes signs of AI-generated writing from text, mak
 Install globally with the cross-agent skills CLI so Humanizer is available in every project:
 
 ```bash
-npx skills add blader/humanizer --global
+npx skills add gdiab/humanizer --global
 ```
 
 Update an existing install:
@@ -23,13 +39,13 @@ npx skills update humanizer --global
 To install globally into every supported agent harness:
 
 ```bash
-npx skills add blader/humanizer --global --agent '*'
+npx skills add gdiab/humanizer --global --agent '*'
 ```
 
 To target one configured harness, pass its agent name:
 
 ```bash
-npx skills add blader/humanizer --global --agent <agent-name>
+npx skills add gdiab/humanizer --global --agent <agent-name>
 ```
 
 Omit `--global` for a project-local install that can be committed and shared with collaborators. Start a new agent session or reload skills after installation.
@@ -39,7 +55,7 @@ Omit `--global` for a project-local install that can be committed and shared wit
 Claude Code users can also install Humanizer as a plugin:
 
 ```
-/plugin marketplace add blader/humanizer
+/plugin marketplace add gdiab/humanizer
 /plugin install humanizer@humanizer
 ```
 
@@ -52,7 +68,7 @@ Any agent harness can use the skill directly because the runtime artifact is `SK
 For example:
 
 ```bash
-git clone https://github.com/blader/humanizer.git /path/to/your/skills/humanizer
+git clone https://github.com/gdiab/humanizer.git /path/to/your/skills/humanizer
 ```
 
 Or, if you already have this repo cloned:
@@ -110,7 +126,7 @@ Rewrites follow a no-fabrication rule: they never add facts, names, dates, or ci
 
 > "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
 
-## 33 Patterns Detected (with Before/After Examples)
+## 36 Patterns Detected (with Before/After Examples)
 
 ### Content Patterns
 
@@ -170,6 +186,14 @@ Rewrites follow a no-fabrication rule: they never add facts, names, dates, or ci
 | 24 | **Excessive hedging** | "could potentially possibly" | "may" |
 | 25 | **Generic conclusions** | "The future looks bright" | Specific plans or facts |
 
+### Rhetorical Posturing (this fork)
+
+| # | Pattern | Before | After |
+|---|---------|--------|-------|
+| 34 | **Colon reveals** | "The best part: it learns." | State it plainly; save colons for lists and labels |
+| 35 | **Faux-insight setups** | "The part everyone misses: distribution is the moat" | "Distribution is the moat" |
+| 36 | **Interpretive metadiscourse** | "This distinction matters more than it sounds" | Delete it, or give the consequence that shows why |
+
 ## Full Example
 
 *(Illustration note: the rewrite below adds specifics, like the month and the neighborhoods, that stand in for details the author would supply. In a real session those come from the user; the skill asks rather than invents.)*
@@ -207,6 +231,9 @@ Rewrites follow a no-fabrication rule: they never add facts, names, dates, or ci
 
 ## Version History
 
+Versions from 2.10.0 on are this fork's. Everything at 2.9.1 and below is upstream [blader/humanizer](https://github.com/blader/humanizer).
+
+- **2.10.0** - Fork additions: patterns #34-36 for colon reveals, faux-insight setups, and interpretive metadiscourse; the portability test as step 5 of Your Task; a detect mode that reports patterns without rewriting, scoring, or claiming AI authorship; and `eval.md`, a 36-check rubric the skill runs against its own output. Package validator now derives the pattern count instead of hardcoding 33. Additions adapted from [petergyang/no-ai-slop](https://github.com/petergyang/no-ai-slop). 36 patterns total.
 - **2.9.1** - Improved distribution and portability: removed nonportable frontmatter and tool preapprovals, made global installation the documented default, added package validation, and removed the duplicated long-form example from the runtime prompt. No change to the 33 patterns.
 - **2.9.0** - Added a no-fabrication rule: rewrites may not invent facts, names, dates, or citations not present in the source, and every example that modeled invented specifics was re-cut to use only source information (fixes #187). Replaced paragraph-count parity with an information-over-shape rule, made a user's voice sample outrank the em dash ban, and added invocation modes (pasted text / file / embedded). No change to the 33 patterns.
 - **2.8.3** - Moved the skill version from the unsupported top-level frontmatter key to `metadata.version` for Agent Skills and Claude compatibility. No change to the 33 patterns.

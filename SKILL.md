@@ -1,15 +1,17 @@
 ---
 name: humanizer
 description: |
-  Remove signs of AI-generated writing from text. Use when editing or reviewing
-  text to make it sound more natural and human-written. Based on Wikipedia's
-  comprehensive "Signs of AI writing" guide. Detects and fixes patterns including:
-  inflated symbolism, promotional language, superficial -ing analyses, vague
-  attributions, em dash overuse, rule of three, AI vocabulary words, passive
-  voice, negative parallelisms, and filler phrases.
+  Remove signs of AI-generated writing from text, or audit a draft and report the
+  patterns without rewriting it. Use when editing or reviewing text to make it sound
+  more natural and human-written, or when asked whether a piece reads as AI. Based on
+  Wikipedia's comprehensive "Signs of AI writing" guide. Detects and fixes patterns
+  including: inflated symbolism, promotional language, superficial -ing analyses,
+  vague attributions, em dash overuse, rule of three, AI vocabulary words, passive
+  voice, negative parallelisms, filler phrases, colon reveals, faux-insight setups,
+  and interpretive metadiscourse.
 license: MIT
 metadata:
-  version: "2.9.1"
+  version: "2.10.0"
 ---
 
 # Humanizer: Remove AI Writing Patterns
@@ -24,6 +26,7 @@ When given text to humanize:
 2. **Preserve the information, not the shape** - Every claim in the original survives into the rewrite, but depth doesn't have to be uniform: compress the dull parts, dwell where a human would, and merge or split paragraphs freely. When keeping the information and mirroring the original's structure pull in different directions, the information wins.
 3. **Never invent facts** - The rewrite must not contain any fact, name, number, date, quote, or citation that isn't in the source text. Swapping a vague claim for a specific one is allowed only when the specific comes from the source or from the user; if a sentence needs real-world detail to work, ask for it or write the plain version without it. Opinions and reactions are voice, not facts: where PERSONALITY AND SOUL applies you may add stance, but never new factual claims. (In fiction, invented detail is the job. This rule governs everything else.)
 4. **Match the voice** - Fit the intended tone (formal, casual, technical). Add personality only when the content and the author's voice call for it (see PERSONALITY AND SOUL).
+5. **Apply the portability test** - If a sentence could move unchanged to another person, company, country, or product, it is filler. Cut it, or replace it with a fact, example, mechanism, consequence, or judgment specific to this subject, drawn from the source under rule 3. This is the fastest single check for whether a paragraph is saying anything.
 
 How you're invoked changes what you deliver (see Invocation Modes). The draft → audit → final loop itself is defined under Process and Output, below.
 
@@ -352,6 +355,33 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 **After:**
 > Whether it's worth the price depends on how often you'll use it.
 
+### 34. Colon Reveals
+
+**Shape to watch:** A noun phrase, a colon, then a short dramatic payoff. "The detail that makes it work: a separate agent grades it." "The best part: it learns." "One catch: it only runs on Linux."
+**Problem:** The colon manufactures suspense the sentence has not earned, and the payoff is usually an ordinary clause in a costume. Stacked three or four times in a piece it becomes the dominant rhythm. Colons are for lists, labels, definitions, and quotes. After any colon you keep, use sentence case unless grammar, a proper noun, a title, or code requires otherwise.
+**Before:**
+> The detail that makes it work: a separate agent grades the output.
+**After:**
+> A separate agent grades the output, which is what makes it work.
+
+### 35. Faux-Insight Setups
+
+**Phrases to watch:** what nobody tells you, the part everyone misses, this is the part most people skip, what most people get wrong, here's the secret, what they don't want you to know
+**Problem:** These position the writer as the lone expert and the reader as part of an ignorant crowd, before any claim has been made. The claim that follows is usually common knowledge. Distinct from §27, which fakes depth about the *subject*, and §33, which fakes candor about the *delivery*. This one fakes authority about the *writer*. Cut the setup and let the claim stand alone.
+**Before:**
+> The part everyone misses: distribution is the real moat.
+**After:**
+> Distribution is the moat.
+
+### 36. Interpretive Metadiscourse
+
+**Phrases to watch:** that last part matters more than it sounds, the key point here is, this distinction matters, as you can see, it's worth pausing on, the part I keep coming back to, what's interesting here is, what this really means is, in other words (when the first phrasing was already clear)
+**Problem:** The prose steps outside the subject to tell the reader what to notice and how much weight to give it. Both positions are tells: the preamble that announces importance before the point, and the trailing aside that assigns weight after it. If the point is clear, the aside is noise. If it is not clear, the aside does not fix it; a concrete consequence does. Delete it outright, or replace it with the fact that would have made the reader care on their own. Related to §27 and §28, which cover the pseudo-depth and tutorial-script forms of the same instinct.
+**Before:**
+> The scheduler retries three times before giving up. This distinction matters more than it sounds.
+**After:**
+> The scheduler retries three times before giving up, so a flaky network call rarely surfaces as a failed job.
+
 ## DETECTION GUIDANCE
 
 ### What NOT to flag (false positives)
@@ -396,12 +426,15 @@ When you see these, lean toward leaving the prose alone — they are evidence of
 
 **Embedded mode.** Another task or agent is using this skill as one step of a larger job (a PR description, a commit message, a doc). Run the loop internally and output only the final text. No draft, no audit bullets, no summary. The caller wants prose, not ceremony.
 
+**Detect mode.** The user asks whether a piece reads as AI, or asks to audit, scan, or flag a draft without changing it. Name each numbered pattern that appears, quote the offending line, and give the fix in a few words. Then stop. Do not rewrite, and do not show a "here's how I'd fix it" version. Do not score the draft or assign a percentage. Do not claim the text was AI-written: detectors guess, and named patterns are evidence the user can check for themselves. Apply DETECTION GUIDANCE before reporting, so you report clusters rather than isolated hits. Offer to run the rewrite afterward.
+
 ## Process and Output
 
 1. Read the input carefully and identify every instance of the patterns above.
 2. Write a **draft rewrite**. Check that it reads naturally aloud, varies sentence length, prefers specific details and simple constructions (is/are/has), and keeps the appropriate register.
 3. Ask two questions: **"What makes the below so obviously AI generated?"** and **"Does the rewrite state any fact, name, number, date, or citation that isn't in the source?"** Answer briefly. A fabrication is a defect even when it sounds more human than the vague original.
 4. Revise into a **final rewrite** that addresses them and contains no em or en dashes (see §14).
+5. Check the final rewrite against `eval.md` yourself. Do not spawn a separate evaluator agent for this. If any check fails, fix the draft and run the checks again.
 
 In pasted-text mode, deliver the draft, the brief "still-AI" bullets, the final rewrite, and (optionally) a short summary of changes. In file and embedded modes, run the same loop but deliver only what the mode calls for (see Invocation Modes).
 

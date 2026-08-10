@@ -2,17 +2,24 @@
   "$schema": "https://json.schemastore.org/claude-code-marketplace-manifest.json",
   "name": "humanizer",
   "owner": {
-    "name": "blader",
-    "url": "https://github.com/blader"
+    "name": "gdiab",
+    "url": "https://github.com/gdiab"
   },
-  "description": "The humanizer skill, installable as a Claude Code plugin.",
+  "description": "The humanizer skill (gdiab fork), installable as a Claude Code plugin.",
   "plugins": [
     {
       "name": "humanizer",
       "source": "./",
-      "description": "Remove signs of AI-generated writing from text, making it sound more natural and human. Based on Wikipedia's \"Signs of AI writing\" guide.",
+      "description": "Remove signs of AI-generated writing from text, or audit a draft without rewriting it. Fork of blader/humanizer.",
       "license": "MIT",
-      "keywords": ["writing", "editing", "ai-detection", "humanize", "prose", "style"]
+      "keywords": [
+        "writing",
+        "editing",
+        "ai-detection",
+        "humanize",
+        "prose",
+        "style"
+      ]
     }
   ]
 }

@@ -1,14 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "humanizer",
-  "description": "Remove signs of AI-generated writing from text, making it sound more natural and human. Based on Wikipedia's \"Signs of AI writing\" guide.",
-  "version": "2.9.1",
+  "description": "Remove signs of AI-generated writing from text, or audit a draft without rewriting it. Fork of blader/humanizer with three added patterns, a portability test, a detect mode, and a self-check rubric.",
+  "version": "2.10.0",
   "author": {
-    "name": "blader",
-    "url": "https://github.com/blader"
+    "name": "gdiab",
+    "url": "https://github.com/gdiab"
   },
-  "homepage": "https://github.com/blader/humanizer",
-  "repository": "https://github.com/blader/humanizer",
+  "homepage": "https://github.com/gdiab/humanizer",
+  "repository": "https://github.com/gdiab/humanizer",
   "license": "MIT",
-  "keywords": ["writing", "editing", "ai-detection", "humanize", "prose", "style"]
+  "keywords": [
+    "writing",
+    "editing",
+    "ai-detection",
+    "humanize",
+    "prose",
+    "style"
+  ]
 }
