@@ -8,7 +8,7 @@ This is a fork of [blader/humanizer](https://github.com/blader/humanizer), track
 
 Four additions, all of them adapted from [petergyang/no-ai-slop](https://github.com/petergyang/no-ai-slop) (MIT), which covers overlapping ground from a different angle:
 
-**Three patterns, numbered 34-36.** Colon reveals ("The best part: it learns."), faux-insight setups ("what nobody tells you"), and interpretive metadiscourse ("that last part matters more than it sounds"). Each is cross-referenced against the adjacent upstream patterns it could be confused with, since §27, §28, and §33 already cover neighboring instincts.
+**Three patterns, numbered 34-36.** Colon reveals ("The best part: it learns."), faux-insight setups ("what nobody tells you"), and interpretive metadiscourse ("that last part matters more than it sounds," "the part I keep coming back to"). Pattern 36 covers both positions: the preamble that announces importance before the point, and the trailing aside that assigns weight after it. Each is cross-referenced against the adjacent upstream patterns it could be confused with, since §27, §28, and §33 already cover neighboring instincts.
 
 **The portability test**, as step 5 of Your Task. If a sentence could move unchanged to another person, company, country, or product, it is filler. This turns out to be the fastest single check for whether a paragraph is saying anything, and it catches prose the other rules pass: writing that sounds like a specific human, commits to a position, and still asserts nothing checkable.
 

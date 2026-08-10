@@ -375,12 +375,16 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 
 ### 36. Interpretive Metadiscourse
 
-**Phrases to watch:** that last part matters more than it sounds, the key point here is, this distinction matters, as you can see, it's worth pausing on, the part I keep coming back to, what's interesting here is, what this really means is, in other words (when the first phrasing was already clear)
+**Phrases to watch:** that last part matters more than it sounds, the key point here is, this distinction matters, as you can see, it's worth pausing on, the part I keep coming back to, the thing that strikes me, what's interesting here is, what this really means is, in other words (when the first phrasing was already clear)
 **Problem:** The prose steps outside the subject to tell the reader what to notice and how much weight to give it. Both positions are tells: the preamble that announces importance before the point, and the trailing aside that assigns weight after it. If the point is clear, the aside is noise. If it is not clear, the aside does not fix it; a concrete consequence does. Delete it outright, or replace it with the fact that would have made the reader care on their own. Related to §27 and §28, which cover the pseudo-depth and tutorial-script forms of the same instinct.
 **Before:**
 > The scheduler retries three times before giving up. This distinction matters more than it sounds.
 **After:**
 > The scheduler retries three times before giving up, so a flaky network call rarely surfaces as a failed job.
+**Before (preamble position):**
+> The part I keep coming back to: your access to intelligence is a government variable now.
+**After:**
+> Your access to intelligence is a government variable now.
 
 ## DETECTION GUIDANCE
 
