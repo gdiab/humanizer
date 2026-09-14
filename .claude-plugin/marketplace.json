@@ -5,17 +5,16 @@
     "name": "gdiab",
     "url": "https://github.com/gdiab"
   },
-  "description": "The humanizer skill (gdiab fork), installable as a Claude Code plugin.",
+  "description": "Install Humanizer (gdiab fork) as a Claude plugin.",
   "plugins": [
     {
       "name": "humanizer",
       "source": "./",
-      "description": "Remove signs of AI-generated writing from text, or audit a draft without rewriting it. Fork of blader/humanizer.",
+      "description": "Rewrite AI-sounding text so it reads naturally without changing what it says, or audit it without rewriting. Fork of blader/humanizer.",
       "license": "MIT",
       "keywords": [
         "writing",
         "editing",
-        "ai-detection",
         "humanize",
         "prose",
         "style"

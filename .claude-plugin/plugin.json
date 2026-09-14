@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "humanizer",
-  "description": "Remove signs of AI-generated writing from text, or audit a draft without rewriting it. Fork of blader/humanizer with three added patterns, a portability test, a detect mode, and a self-check rubric.",
-  "version": "2.10.0",
+  "description": "Rewrite AI-sounding text so it reads naturally without changing what it says, or audit a draft and name the patterns without rewriting it. Fork of blader/humanizer with a reader-comprehension pattern group, a portability test, a detect mode, and a self-check rubric.",
+  "version": "3.1.0",
   "author": {
     "name": "gdiab",
     "url": "https://github.com/gdiab"
@@ -13,9 +13,11 @@
   "keywords": [
     "writing",
     "editing",
-    "ai-detection",
     "humanize",
     "prose",
     "style"
+  ],
+  "skills": [
+    "./"
   ]
 }
