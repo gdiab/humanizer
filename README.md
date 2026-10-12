@@ -2,6 +2,20 @@
 
 Humanizer rewrites AI-sounding text so it reads like a person wrote it, without changing what it says. Because it is just Markdown, it works with any agent that supports skills.
 
+## Development moved to GD stack
+
+Future updates to this variant live in [GD stack's Humanizer](https://github.com/gdiab/gdstack/tree/main/skills/writing/humanizer). It includes the existing pattern guide and a new optional workflow for developing nonfiction stories from experience and evidence.
+
+This repository keeps the last standalone release, its history, and its existing installation paths. It no longer receives feature updates. For the maintained version, install Humanizer from GD stack:
+
+```bash
+npx skills@latest add gdiab/gdstack --skill humanizer
+```
+
+For the Claude Code plugin, install `gdstack@gdstack` from the `gdiab/gdstack` marketplace and use `/gdstack:humanizer`. Verify the new skill is available before retiring a duplicate standalone installation, and update project instructions that point directly at the old path. Keep any local changes before removing an old installation.
+
+The documentation below describes the retained standalone release.
+
 ## About this fork
 
 This is a fork of [blader/humanizer](https://github.com/gdiab/humanizer), rebased onto upstream 3.0.0. Patterns 1 to 25, the account of why AI text sounds the way it does, and the Wikipedia-derived framework are upstream's work. MIT licensed both ways.
