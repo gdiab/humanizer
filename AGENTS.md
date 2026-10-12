@@ -1,6 +1,8 @@
 # Guide for agents
 
-This file explains how to change Humanizer without breaking its package or prompt.
+Future feature development lives in [GD stack](https://github.com/gdiab/gdstack/tree/main/skills/writing/humanizer). This repository retains the standalone 3.1.0 package and history. Keep changes here limited to migration documentation and explicitly requested compatibility fixes; do not develop a second feature branch or automatically sync from GD stack.
+
+The guidance below documents the retained standalone package and applies to any maintenance it needs.
 
 ## What this repo contains
 
